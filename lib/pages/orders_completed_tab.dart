@@ -7,8 +7,10 @@ import '../components/loader.dart';
 import '../providers/cart.dart';
 import '../services/api_handler.dart';
 
-class OrderTab extends StatefulWidget { const OrderTab({
-  Key? key,
+class OrderTab extends StatefulWidget {
+  final String? view;
+  const OrderTab({
+  Key? key, this.view,
 }) : super(key: key);
 
 @override
@@ -63,14 +65,21 @@ class _OrderTabState extends State<OrderTab> {
                       ],
                     ),
 
-                    subtitle: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(DateFormat('EEEE, MMMM d').format(DateTime.parse(item['createdAt'])), style: const TextStyle(fontSize: 12)),
-                        Text('\$${item['totalPrice']}', style: const TextStyle(fontSize: 12)),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(DateFormat('EEEE, MMMM d').format(DateTime.parse(item['createdAt'])), style: const TextStyle(fontSize: 12)),
+                            Text('\$${item['totalPrice']}', style: const TextStyle(fontSize: 12)),
+                          ],
+                        ),
+                        Text('User: ${item['user']['firstName']} ${item['user']['lastName']}', style: const TextStyle(fontSize: 12)),
+
                       ],
-                    ),
+                    )
                   ),
               ),
             ).toList(),

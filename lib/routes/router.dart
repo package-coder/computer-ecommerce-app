@@ -1,10 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:mobile_app/pages/account_page.dart';
 import 'package:mobile_app/pages/home_page.dart';
+import 'package:mobile_app/pages/initialize_shop_page.dart';
 import 'package:mobile_app/pages/login_page.dart';
-import 'package:mobile_app/pages/parts_detail.dart';
 import 'package:mobile_app/pages/register_page.dart';
-import 'package:mobile_app/pages/service_detail.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
@@ -12,14 +11,6 @@ import 'package:mobile_app/pages/service_detail.dart';
     AutoRoute(
       path: '/',
       page: HomePage,
-    ),
-    AutoRoute(
-      path: '/product',
-      page: PartsDetailPage,
-    ),
-    AutoRoute(
-      path: '/service',
-      page: ServiceDetailPage,
     ),
     AutoRoute(
       path: '/register',
@@ -33,6 +24,10 @@ import 'package:mobile_app/pages/service_detail.dart';
       path: '/login',
       page: LoginPage,
     ),
+    AutoRoute(
+      path: '/shop',
+      page: InitShopPage
+    )
   ],
 )
 class $AppRouter {}

@@ -47,22 +47,6 @@ class ApiHandler {
     return false;
   }
 
-
-  // Future<String?> refreshToken() async {
-  //   try {
-  //     final response = await dio.post("/api/rest/v1/auth/refresh-token");
-  //
-  //     if (response.statusCode == 200) {
-  //       final jwt = response.data['token'];
-  //       dio.options.headers['Cookie'] = "Bearer $jwt";
-  //       return jwt;
-  //     }
-  //   } catch(e) {
-  //     print(e);
-  //   }
-  //   return null;
-  // }
-
   Future<dynamic> getSession() async {
     try {
       final response = await dio.get("/api/rest/v1/auth/session");
@@ -173,24 +157,6 @@ class ApiHandler {
     }
   }
 
-  Future<Map> productDetailFetch(int productId) async {
-    // String? authToken = await storage.read(key: 'token');
-    final prefs = await SharedPreferences.getInstance();
-    final authToken = prefs.getString('token');
-    http.Response response = await http.get(
-      Uri.parse('${url}api/catalog/productdetail/$productId/'),
-      headers: {'Authorization': 'Token $authToken'},
-    );
-
-    unauthorized(response.statusCode);
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    }
-
-    return {};
-  }
-
   Future<List> serviceListFetch() async {
     try {
       final response = await dio.get('/api/rest/v1/services');
@@ -230,80 +196,31 @@ class ApiHandler {
     }
   }
 
-  Future<Map> serviceDetailFetch(int serviceId) async {
-    // String? authToken = await storage.read(key: 'token');
-    final prefs = await SharedPreferences.getInstance();
-    final authToken = prefs.getString('token');
-    http.Response response = await http.get(
-      Uri.parse('${url}api/sales/servicedetail/$serviceId/'),
-      headers: {'Authorization': 'Token $authToken'},
-    );
+  Future<dynamic> getShopDetail() async {
+    try {
+      final response = await dio.get('/api/rest/v1/shop');
 
-    unauthorized(response.statusCode);
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+      return null;
+    }catch(e){
+      print(e);
+      rethrow;
     }
-
-    return {};
   }
 
-  Future<Map> customerDetailFetch() async {
-    // String? authToken = await storage.read(key: 'token');
-    final prefs = await SharedPreferences.getInstance();
-    final authToken = prefs.getString('token');
-    http.Response response = await http.get(
-      Uri.parse('${url}api/sales/customerdetail/'),
-      headers: {'Authorization': 'Token $authToken'},
-    );
-
-    unauthorized(response.statusCode);
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+  Future<void> createShop(dynamic shop) async {
+    try {
+      await dio.post('/api/rest/v1/add/shop', data: shop,
+      options: Options(
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      ));
+    } catch (e) {
+      print(e);
+      rethrow;
     }
-
-    return {};
-  }
-
-  Future<bool> productOrder(int productId) async {
-    // String? authToken = await storage.read(key: 'token');
-    final prefs = await SharedPreferences.getInstance();
-    final authToken = prefs.getString('token');
-    http.Response response = await http.post(
-      Uri.parse('${url}api/sales/productorder/'),
-      headers: {'Authorization': 'Token $authToken'},
-      body: {'product_id': '$productId'},
-    );
-
-    unauthorized(response.statusCode);
-
-    if (response.statusCode == 201) {
-      return true;
-    }
-
-    return false;
-  }
-
-  Future<bool> serviceBook(int serviceId, int technicianId) async {
-    // String? authToken = await storage.read(key: 'token');
-    final prefs = await SharedPreferences.getInstance();
-    final authToken = prefs.getString('token');
-    http.Response response = await http.post(
-      Uri.parse('${url}api/sales/servicebook/'),
-      headers: {'Authorization': 'Token $authToken'},
-      body: {
-        'product_id': '$serviceId',
-        'technician_id': '$technicianId',
-      },
-    );
-
-    unauthorized(response.statusCode);
-
-    if (response.statusCode == 201) {
-      return true;
-    }
-
-    return false;
   }
 }

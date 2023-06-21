@@ -8,7 +8,8 @@ import '../components/loader.dart';
 import '../providers/cart.dart';
 
 class ServiceTab extends StatefulWidget {
-  const ServiceTab({super.key});
+  final String? view;
+  const ServiceTab({super.key, this.view});
 
   @override
   State<ServiceTab> createState() => _ServiceTabState();
@@ -33,6 +34,43 @@ class _ServiceTabState extends State<ServiceTab> {
             child: Text('Service list is empty'),
           );
         }
+
+        if(widget.view == 'list_view') {
+          return ListView(
+            children: ListTile.divideTiles(
+              context: context,
+              tiles: snapshot.data!.map((item) =>
+                  ListTile(
+                    title:  Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('${item['name']}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            )),
+                        Text(item['enable'] ? 'Available' : 'Not Available', style: TextStyle(
+                            fontSize: 12, color: item['enable'] ? Colors.blueGrey : Colors.redAccent
+                        )),
+
+                      ],
+                    ),
+                    subtitle: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('${item['description']}', style: const TextStyle(fontSize: 12)),
+                        Text('\$${item['fee']}', style: const TextStyle(fontSize: 12)),
+                      ],
+                    ),
+                  ),
+              ),
+            ).toList(),
+
+          );
+        }
+
 
         return ListView.builder(
             itemCount: services.length,

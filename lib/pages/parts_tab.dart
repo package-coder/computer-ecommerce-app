@@ -6,7 +6,8 @@ import '../components/loader.dart';
 import '../providers/cart.dart';
 
 class PartsTab extends StatefulWidget {
-  const PartsTab({super.key});
+  final String? view;
+  const PartsTab({super.key, this.view});
 
   @override
   State<PartsTab> createState() => _PartsTabState();
@@ -30,6 +31,42 @@ class _PartsTabState extends State<PartsTab> {
         if(products.isEmpty) {
           return const Center(
             child: Text('Product list is empty'),
+          );
+        }
+
+        if(widget.view == 'list_view') {
+          return ListView(
+            children: ListTile.divideTiles(
+              context: context,
+              tiles: snapshot.data!.map((item) =>
+                  ListTile(
+                    title:  Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('${item['name']}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            )),
+                        Text(item['enable'] ? 'Available' : 'Not Available', style: TextStyle(
+                            fontSize: 12, color: item['enable'] ? Colors.blueGrey : Colors.redAccent
+                        )),
+
+                      ],
+                    ),
+                    subtitle: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('${item['description']}', style: const TextStyle(fontSize: 12)),
+                        Text('\$${item['price']}', style: const TextStyle(fontSize: 12)),
+                      ],
+                    ),
+                  ),
+              ),
+            ).toList(),
+
           );
         }
 
@@ -107,94 +144,6 @@ class _PartsTabState extends State<PartsTab> {
             );
           },
         );
-        // return ListView(
-        //     children: ListTile.divideTiles(
-        //       context: context,
-        //       tiles: snapshot.data!.map((item) =>
-        //         Card(
-        //           child: ListTile(
-        //             isThreeLine: true,
-        //             dense: true,
-        //             onTap: () { },
-        //             leading: Image.network(
-        //               fit: BoxFit.fill,
-        //               '${ApiHandler.baseURl}public/images/${item['image']['filename']}',
-        //             ),
-        //             title: Text('${item['name']}',
-        //                 style: const TextStyle(
-        //                   fontSize: 18,
-        //                   fontWeight: FontWeight.bold,
-        //                 )),
-        //             subtitle: Container(
-        //               child: Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                 children: [
-        //                   Text('\$${item['price']}'),
-        //                   Text(item['description'])
-        //                 ],
-        //               ),
-        //             ),
-        //             trailing: IconButton(
-        //               icon: const Icon(Icons.add_shopping_cart),
-        //               onPressed: () {  },
-        //             ),
-        //           ),
-        //         )
-        //       ),
-        //     ).toList(),
-        //     // children: snapshot.data!.map((item) {
-        //     //   print('item $item');
-        //     //
-        //     //   return (
-        //     //       SizedBox(
-        //     //     height: 100,
-        //     //     child: Row(
-        //     //       children: [
-        //     //         Container(
-        //     //           width: 130,
-        //     //           decoration: BoxDecoration(
-        //     //               color: Colors.black12,
-        //     //               image: DecorationImage(
-        //     //                 image: Image.network(
-        //     //                   fit: BoxFit.fill,
-        //     //                   '${ApiHandler.baseURl}public/images/${item['image']['filename']}',
-        //     //                 ).image,
-        //     //               )
-        //     //           ),
-        //     //         ),
-        //     //         Expanded(
-        //     //             child: Container(
-        //     //               color: Colors.black12,
-        //     //               child: Padding(
-        //     //                 padding: const EdgeInsets.all(16),
-        //     //                 child: Column(
-        //     //                   crossAxisAlignment: CrossAxisAlignment.start,
-        //     //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //     //                   children: [
-        //     //                     Row(
-        //     //                       crossAxisAlignment: CrossAxisAlignment.center,
-        //     //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     //                       children: [
-        //     //                         Text('${item['name']}',
-        //     //                             style: const TextStyle(
-        //     //                               fontSize: 18,
-        //     //                               fontWeight: FontWeight.bold,
-        //     //                             )),
-        //     //                         Text('\$${item['price']}'),
-        //     //                       ],
-        //     //                     ),
-        //     //                     Text(item['description'])
-        //     //                   ],
-        //     //                 ),
-        //     //               ),
-        //     //             ))
-        //     //       ],
-        //     //     ),
-        //     //   )
-        //     //   );
-        //     // }
-        //
-        //     );
       },
     );
   }

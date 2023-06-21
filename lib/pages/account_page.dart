@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/pages/initialize_shop_page.dart';
 import 'package:mobile_app/pages/orders_tab.dart';
 import 'package:mobile_app/routes/router.gr.dart';
 import 'package:mobile_app/services/api_handler.dart';
@@ -31,79 +32,60 @@ class _AccountState extends State<AccountPage> {
 
           return DefaultTabController(
               length: 3,
-              child: Container(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 40,
+                          width: 40,
+                          margin: const EdgeInsets.only(right: 14),
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.blueGrey,
+                            child: Icon(Icons.person, color: Colors.white),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              height: 40,
-                              width: 40,
-                              margin: const EdgeInsets.only(right: 14),
-                              child: const CircleAvatar(
-                                backgroundColor: Colors.blueGrey,
-                                child: Icon(Icons.person, color: Colors.white),
+                            Text(
+                              "${session['firstName']} ${session['lastName']}",
+                              style: const TextStyle(
+                                fontSize: 16,
                               ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${session['firstName']} ${session['lastName']}",
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                Text(
-                                  "${session['email']}",
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.blueGrey
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              "${session['email']}",
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.blueGrey
+                              ),
                             ),
                           ],
                         ),
+                      ],
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () => context.router.pushNamed('/shop'),
+                    title: const Text('Shop management'),
+                    trailing: const Icon(Icons.keyboard_arrow_right),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.black.withOpacity(0.03),
+                      child: const Column(
+                        children: [
+                          SizedBox(height: 20),
+                          Text('My Orders'),
+                          Expanded(child: OrderTab())
+                        ],
                       ),
-                      const Divider(height: 1),
-                      Expanded(
-                        child: Container(
-                          color: Colors.black.withOpacity(0.01),
-                          child: const Column(
-                            children: [
-                              // TabBar(
-                              //   tabs: <Widget>[
-                              //     Padding(
-                              //       padding: EdgeInsets.symmetric(vertical: 15),
-                              //       child: Text('Pending', style: TextStyle(color: Colors.blue)),
-                              //     ),
-                              //     Padding(
-                              //       padding: EdgeInsets.symmetric(vertical: 15),
-                              //       child: Text('To Review', style: TextStyle(color: Colors.blue)),
-                              //     ),
-                              //     Padding(
-                              //       padding: EdgeInsets.symmetric(vertical: 15),
-                              //       child: Text('Completed', style: TextStyle(color: Colors.blue)),
-                              //     ),
-                              //   ],
-                              // ),
-                              Divider(height: 1),
-                              Expanded(child: OrderTab())
-
-                              // Expanded(child: TabBarView(children: [
-                              //   OrderTab(),
-                              //   OrderTab(),
-                              //   OrderTab(),
-                              // ])),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   )
+                ],
               )
           );
         },
