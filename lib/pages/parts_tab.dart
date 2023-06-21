@@ -14,59 +14,64 @@ class PartsTab extends StatefulWidget {
 }
 
 class _PartsTabState extends State<PartsTab> {
-
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
 
     return FutureBuilder<List>(
-      future: ApiHandler().productListFetch(),
+      future: widget.view == 'list_view'
+          ? ApiHandler().productListFetch()
+          : ApiHandler().shopProductListFetch(),
       builder: (context, snapshot) {
-        final products = snapshot.data?.where((element) => element['enable']).toList() ?? [];
+        final products =
+            snapshot.data?.where((element) => element['enable']).toList() ?? [];
 
-        if(snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Loader();
         }
 
-        if(products.isEmpty) {
+        if (products.isEmpty) {
           return const Center(
             child: Text('Product list is empty'),
           );
         }
 
-        if(widget.view == 'list_view') {
+        if (widget.view == 'list_view') {
           return ListView(
             children: ListTile.divideTiles(
               context: context,
-              tiles: snapshot.data!.map((item) =>
-                  ListTile(
-                    title:  Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('${item['name']}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            )),
-                        Text(item['enable'] ? 'Available' : 'Not Available', style: TextStyle(
-                            fontSize: 12, color: item['enable'] ? Colors.blueGrey : Colors.redAccent
-                        )),
-
-                      ],
-                    ),
-                    subtitle: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('${item['description']}', style: const TextStyle(fontSize: 12)),
-                        Text('\$${item['price']}', style: const TextStyle(fontSize: 12)),
-                      ],
-                    ),
+              tiles: snapshot.data!.map(
+                (item) => ListTile(
+                  title: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${item['name']}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          )),
+                      Text(item['enable'] ? 'Available' : 'Not Available',
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: item['enable']
+                                  ? Colors.blueGrey
+                                  : Colors.redAccent)),
+                    ],
                   ),
+                  subtitle: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${item['description']}',
+                          style: const TextStyle(fontSize: 12)),
+                      Text('\$${item['price']}',
+                          style: const TextStyle(fontSize: 12)),
+                    ],
+                  ),
+                ),
               ),
             ).toList(),
-
           );
         }
 
@@ -77,11 +82,10 @@ class _PartsTabState extends State<PartsTab> {
             crossAxisSpacing: 4,
           ),
           itemCount: products.length,
-
           itemBuilder: (context, index) {
             final item = products[index];
 
-            if(!item['enable']) {
+            if (!item['enable']) {
               return null;
             }
 
@@ -90,18 +94,17 @@ class _PartsTabState extends State<PartsTab> {
                 children: [
                   Expanded(
                       child: Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: Image.network(
-                                '${ApiHandler.baseURl}public/images/${item['image']['filename']}',
-                              ).image,
-                              fit: BoxFit.cover,
-                            )
-                        ),
-                      )
-                  ),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                      image: Image.network(
+                        '${ApiHandler.baseURl}public/images/${item['image']['filename']}',
+                      ).image,
+                      fit: BoxFit.cover,
+                    )),
+                  )),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 14),
                     child: Column(
                       children: [
                         Row(
@@ -111,9 +114,9 @@ class _PartsTabState extends State<PartsTab> {
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                )
-                            ),
-                            Text('\$${item['price']}', style: const TextStyle(fontSize: 12)),
+                                )),
+                            Text('\$${item['price']}',
+                                style: const TextStyle(fontSize: 12)),
                           ],
                         ),
                         Container(
@@ -121,17 +124,19 @@ class _PartsTabState extends State<PartsTab> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(item['description'], style: const TextStyle(fontSize: 12)),
+                              Text(item['description'],
+                                  style: const TextStyle(fontSize: 12)),
                               TextButton(
                                 style: TextButton.styleFrom(
                                   minimumSize: Size.zero,
                                   padding: EdgeInsets.zero,
-                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
                                 ),
                                 child: const Text('add'),
                                 onPressed: () {
                                   cart.addItem(item, 'product');
-                                } ,
+                                },
                               )
                             ],
                           ),

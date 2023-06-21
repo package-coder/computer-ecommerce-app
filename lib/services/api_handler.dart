@@ -15,11 +15,10 @@ class ApiHandler {
   final router = getIt<AppRouter>();
 
   static final Dio dio = Dio(BaseOptions(
-    baseUrl: baseURl,
-    receiveTimeout: 3000,
-    connectTimeout: 5000,
-    contentType:  "application/json"
-  ));
+      baseUrl: baseURl,
+      receiveTimeout: 3000,
+      connectTimeout: 5000,
+      contentType: "application/json"));
 
   void unauthorized(int status) {
     if (status == 401) {
@@ -40,7 +39,7 @@ class ApiHandler {
 
         return true;
       }
-    } catch(e) {
+    } catch (e) {
       print(e);
       return false;
     }
@@ -96,7 +95,7 @@ class ApiHandler {
       if (response.statusCode == 200) {
         return true;
       }
-    } catch(e) {
+    } catch (e) {
       print(e);
       return false;
     }
@@ -120,7 +119,7 @@ class ApiHandler {
 
         return true;
       }
-    } catch(e) {
+    } catch (e) {
       print(e);
       return false;
     }
@@ -151,7 +150,7 @@ class ApiHandler {
         return response.data;
       }
       return [];
-    }catch(e){
+    } catch (e) {
       print(e);
       rethrow;
     }
@@ -165,26 +164,55 @@ class ApiHandler {
         return response.data;
       }
       return [];
-    }catch(e){
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<List> shopProductListFetch() async {
+    try {
+      final response = await dio.get('/api/rest/v1/shop/products');
+      print(response.data.runtimeType);
+      // unauthorized(response.statusCode);
+
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<List> shopServiceListFetch() async {
+    try {
+      final response = await dio.get('/api/rest/v1/shop/services');
+
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+      return [];
+    } catch (e) {
       print(e);
       rethrow;
     }
   }
 
   Future<List> orderListFetch(String status) async {
-      try {
-        final response = await dio.get('/api/rest/v1/orders', queryParameters: {
-          'status': status
-        });
+    try {
+      final response = await dio
+          .get('/api/rest/v1/orders', queryParameters: {'status': status});
 
-        if (response.statusCode == 200) {
-          return response.data;
-        }
-        return [];
-      }catch(e){
-        print(e);
-        rethrow;
+      if (response.statusCode == 200) {
+        return response.data;
       }
+      return [];
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
   }
 
   Future<void> createOrder(dynamic order) async {
@@ -204,7 +232,7 @@ class ApiHandler {
         return response.data;
       }
       return null;
-    }catch(e){
+    } catch (e) {
       print(e);
       rethrow;
     }
@@ -212,12 +240,9 @@ class ApiHandler {
 
   Future<void> createShop(dynamic shop) async {
     try {
-      await dio.post('/api/rest/v1/add/shop', data: shop,
-      options: Options(
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      ));
+      await dio.post('/api/rest/v1/add/shop',
+          data: shop,
+          options: Options(headers: {'Content-Type': 'multipart/form-data'}));
     } catch (e) {
       print(e);
       rethrow;
