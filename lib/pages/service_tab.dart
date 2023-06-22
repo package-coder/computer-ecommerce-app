@@ -22,8 +22,8 @@ class _ServiceTabState extends State<ServiceTab> {
 
     return FutureBuilder<List>(
       future: widget.view == 'list_view'
-          ? ApiHandler().serviceListFetch()
-          : ApiHandler().shopServiceListFetch(),
+          ? ApiHandler().shopServiceListFetch()
+          : ApiHandler().serviceListFetch(),
       builder: (context, snapshot) {
         final services =
             snapshot.data?.where((element) => element['enable']).toList() ?? [];

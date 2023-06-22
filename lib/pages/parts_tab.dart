@@ -20,8 +20,8 @@ class _PartsTabState extends State<PartsTab> {
 
     return FutureBuilder<List>(
       future: widget.view == 'list_view'
-          ? ApiHandler().productListFetch()
-          : ApiHandler().shopProductListFetch(),
+          ? ApiHandler().shopProductListFetch()
+          : ApiHandler().productListFetch(),
       builder: (context, snapshot) {
         final products =
             snapshot.data?.where((element) => element['enable']).toList() ?? [];
