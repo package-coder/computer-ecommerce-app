@@ -85,7 +85,7 @@ class _PartsTabState extends State<PartsTab> {
           itemBuilder: (context, index) {
             final item = products[index];
 
-            if (!item['enable']) {
+            if (!item['enable'] || item['shop'] == null) {
               return null;
             }
 
@@ -106,6 +106,7 @@ class _PartsTabState extends State<PartsTab> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 14),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,7 +141,9 @@ class _PartsTabState extends State<PartsTab> {
                               )
                             ],
                           ),
-                        )
+                        ),
+                        Text(item['shop']['name'],
+                                  style: const TextStyle(fontSize: 12)),
                       ],
                     ),
                   )

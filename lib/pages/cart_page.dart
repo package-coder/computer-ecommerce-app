@@ -27,6 +27,7 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: Consumer<CartProvider>(
               builder: (BuildContext context, provider, widget) {
+                print(provider.items);
                 if (provider.items.isEmpty) {
                   return const Center(
                       child: Text(
@@ -61,14 +62,20 @@ class _CartScreenState extends State<CartScreen> {
                       ],
                             ),
 
-                            subtitle: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(item['type'], style: const TextStyle(fontSize: 12)),
-                                Text('qty: ${item['quantity']}', style: const TextStyle(fontSize: 12)),
-                              ],
-                            ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(item['type'], style: const TextStyle(fontSize: 12)),
+                                    Text('qty: ${item['quantity']}', style: const TextStyle(fontSize: 12)),
+                                  ],
+                                ),
+                                Text(item['item']['shop']['name'], style: const TextStyle(fontSize: 12)),
+                              ]
+                            )
                           ),
                       ),
                     ).toList(),

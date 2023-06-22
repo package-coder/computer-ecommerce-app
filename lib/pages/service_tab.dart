@@ -81,7 +81,7 @@ class _ServiceTabState extends State<ServiceTab> {
           itemBuilder: (context, index) {
             final item = services[index];
 
-            if (!item['enable']) {
+            if (!item['enable'] || item['shop'] == null) {
               return null;
             }
             return Card(
