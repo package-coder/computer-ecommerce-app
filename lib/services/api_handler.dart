@@ -200,10 +200,25 @@ class ApiHandler {
     }
   }
 
-  Future<List> orderListFetch(String status) async {
+  Future<List> orderListFetch4User(String status) async {
     try {
       final response = await dio
-          .get('/api/rest/v1/orders', queryParameters: {'status': status});
+          .get('/api/rest/v1/orders4user', queryParameters: {'status': status});
+
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<List> orderListFetch4Provider(String status) async {
+    try {
+      final response = await dio.get('/api/rest/v1/orders4provider',
+          queryParameters: {'status': status});
 
       if (response.statusCode == 200) {
         return response.data;
@@ -221,6 +236,17 @@ class ApiHandler {
     } catch (e) {
       print(e);
       rethrow;
+    }
+  }
+
+  Future<bool> updateOrder(String id, dynamic update) async {
+    try {
+      final response =
+          await dio.put('/api/rest/v1/update/order/${id}', data: update);
+      return response.data;
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 
